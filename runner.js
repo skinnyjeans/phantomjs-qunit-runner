@@ -132,8 +132,15 @@
                         message: " - \033[31m" + result.name + ":\033[39m " + result.passed + "/" + result.total
                     });
 
-                    window._testFailures[result.module+":"+result.name].forEach( function ( name ) {
-                        window.callPhantom({ message: "    " + name });
+                    window._testFailures[result.module+":"+result.name].forEach( function ( result ) {
+                        var message = ( result.message || "Unnamed" );
+                        if ( typeof(result.expected) !== "undefined" ){
+                            if ( typeof(result.actual) !== "undefined" ){
+                                message = message + " - got: " + result.actual;
+                            }
+                            message = message + ", expected: " + result.expected;
+                        }
+                        window.callPhantom({ message: "   - " + message });
                     });
                 }
             });
@@ -151,7 +158,7 @@
                     if ( typeof ( window._testFailures[_name] ) === "undefined" ){
                         window._testFailures[_name] = [];
                     }
-                    window._testFailures[_name].push(result.message || 'Unnamed');
+                    window._testFailures[_name].push(result);
                 }
                 window.callPhantom({});
             });
