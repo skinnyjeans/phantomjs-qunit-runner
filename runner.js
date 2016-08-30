@@ -253,7 +253,7 @@ function _help (msg) {
         + "--timeout - optional, time to wait between tests running, protects against hanging tests\n"
         + "--verbose - enables console.log from source page\n"
     );
-    phantom.exit();
+    phantom.exit( 1 );
 }
 
 function _writeOutput ( output, file ){
