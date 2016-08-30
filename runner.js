@@ -216,13 +216,22 @@
 
     var addJSON = function () {
         window.document.addEventListener('DOMContentLoaded', function () {
-            var _resultReport = {};
+            var _testReport = {};
+            QUnit.moduleDone(function (result) {
+                var moduleName = result.name || 'unnamed';
+                result.tests = _testReport[moduleName].tests;
+                _testReport[moduleName] = result;
+            });
             QUnit.testDone(function (result) {
-                _resultReport[result.module] = _resultReport[result.module] || [];
-                _resultReport[result.module].push(result);
+                var moduleName = result.module || 'unnamed';
+                _testReport[moduleName] = _testReport[moduleName] || { tests : [] };
+                _testReport[moduleName].tests.push(result);
             });
             QUnit.done(function (result) {
-                window.callPhantom({ finish: _resultReport, hasFailures: (result.failed > 0 ? true : false) });
+                window.callPhantom({
+                    finish: { modules: Object.keys(_testReport).map( function (key) { return _testReport[key] } ) },
+                    hasFailures: (result.failed > 0 ? true : false)
+                });
             });
             QUnit.log(function (result) { window.callPhantom({}); });
         });
