@@ -1,0 +1,10 @@
+{
+  "name": "phantomjs-qunit-runner",
+  "version": "0.0.1",
+  "description": "A QUnit test runner plugin for PhantomJS",
+  "main": "runner.js",
+  "keywords": [ "qunit", "phantomjs", "javascript", "test" ],
+  "dependencies": {
+    "qunit": ">1.20.0"
+  }
+}

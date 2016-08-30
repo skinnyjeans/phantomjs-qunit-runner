@@ -12,7 +12,9 @@
 
 var page = require('webpage').create(),
     opts = _parseOpts( require('system').args ),
-    exitCode = 1;
+    fs = require('fs'), // phantomjs' own fs
+    exitCode = 1,
+    testTimeout = null;
 
 /*
     The page setup,
@@ -30,7 +32,6 @@ var page = require('webpage').create(),
 
 */
 
-var testTimeout;
 page.onCallback = function ( data ) {
     clearTimeout( testTimeout );
 
@@ -41,10 +42,10 @@ page.onCallback = function ( data ) {
     if ( data.finish ) {
 
         if ( typeof( data.finish ) == "object" ){
-            console.log( JSON.stringify( data.finish ) );
+            _writeOutput( JSON.stringify( data.finish ), opts.output );
         }
         else {
-            console.log( data.finish );
+            _writeOutput( data.finish, opts.output );
         }
 
         page.close();
@@ -81,6 +82,7 @@ page.open(opts.page, function(stat) {
         console.log( "webpage wouldn't open" );
         phantom.exit(1);
     }
+    testTimeout = setTimeout( function () { phantom.exit( exitCode ); }, opts.timeout );
 });
 
 /* addDefault
@@ -235,7 +237,6 @@ function _parseOpts ( args ) {
         }
     });
 
-    var fs = require('fs'); // THIS IS PhantomJS-fs ( http://phantomjs.org/api/fs/ ???? why??? )
     options.page = args.shift();
     if ( ! fs.exists( options.page ) ){
         _help("File " + options.page + " doesn't exist");
@@ -254,4 +255,13 @@ function _help (msg) {
         + "--verbose - enables console.log from source page\n"
     );
     phantom.exit();
+}
+
+function _writeOutput ( output, file ){
+    if ( file ) {
+        fs.write( file, output, 'w' );
+    }
+    else {
+        console.log( output );
+    }
 }
