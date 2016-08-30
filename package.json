@@ -4,6 +4,9 @@
   "dependencies": {
     "phantomjs": ">1.5.9"
   },
+  "devDependencies": {
+    "phantomjs-prebuilt": "2.1.12"
+  },
   "engines": {
     "node": ">=0.8.0"
   }
