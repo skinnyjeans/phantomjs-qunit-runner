@@ -12,7 +12,6 @@
 
 var page = require('webpage').create(),
     opts = _parseOpts( require('system').args ),
-    fs = require('fs'), // phantomjs' own fs
     exitCode = 1,
     testTimeout = null;
 
@@ -238,7 +237,7 @@ function _parseOpts ( args ) {
     });
 
     options.page = args.shift();
-    if ( ! fs.exists( options.page ) ){
+    if ( ! require('fs').exists( options.page ) ){
         _help("File " + options.page + " doesn't exist");
     }
 
@@ -259,7 +258,7 @@ function _help (msg) {
 
 function _writeOutput ( output, file ){
     if ( file ) {
-        fs.write( file, output, 'w' );
+        require('fs').write( file, output, 'w' );
     }
     else {
         console.log( output );
