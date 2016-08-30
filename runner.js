@@ -12,7 +12,6 @@
 
 var page = require('webpage').create(),
     opts = _parseOpts( require('system').args ),
-    exitCode = 1,
     testTimeout = null;
 
 /*
@@ -37,8 +36,7 @@ page.onCallback = function ( data ) {
     if ( data.message ) {
         console.log( data.message );
     }
-
-    if ( data.finish ) {
+    if ( typeof(data.finish) !== "undefined" ) {
 
         if ( typeof( data.finish ) == "object" ){
             _writeOutput( JSON.stringify( data.finish ), opts.output );
@@ -47,12 +45,10 @@ page.onCallback = function ( data ) {
             _writeOutput( data.finish, opts.output );
         }
 
-        page.close();
-        exitCode = data.hasFailures ? 1 : 0;
-        opts.timeout = 0;
+        return exit( data.hasFailures ? 1 : 0 );
     }
 
-    testTimeout = setTimeout( function () { phantom.exit( exitCode ); }, opts.timeout );
+    testTimeout = setTimeout( function () { exit( 0 ); }, opts.timeout );
 };
 
 // add QUnit hooks
@@ -81,8 +77,13 @@ page.open(opts.page, function(stat) {
         console.log( "webpage wouldn't open" );
         phantom.exit(1);
     }
-    testTimeout = setTimeout( function () { phantom.exit( exitCode ); }, opts.timeout );
+    testTimeout = setTimeout( function () { exit( 0 ); }, opts.timeout );
 });
+
+var exit = function ( code ) {
+    page.close();
+    setTimeout( function () { phantom.exit( code ); }, 100 );
+};
 
 /* addDefault
 
@@ -150,6 +151,7 @@ var addDefault = function () {
                 }
                 window._testFailures[_name].push(result.message || 'Unnamed');
             }
+            window.callPhantom({});
         });
 
         QUnit.done(function (result) {
@@ -173,6 +175,7 @@ var addJUnit = function () {
                 hasFailures: (result.failed > 0 ? true : false)
             });
         };
+        QUnit.log(function (result) { window.callPhantom({}); });
     });
 };
 
@@ -212,6 +215,7 @@ var addJSON = function () {
         QUnit.done(function (result) {
             window.callPhantom({ finish: window._resultReport, hasFailures: (result.failed > 0 ? true : false) });
         });
+        QUnit.log(function (result) { window.callPhantom({}); });
     });
 };
 
