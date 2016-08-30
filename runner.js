@@ -106,8 +106,8 @@
     var addDefault = function () {
         window.document.addEventListener('DOMContentLoaded', function () {
 
-            window._currentModule = "";
-            window._testFailures = {};
+            var _currentModule = "",
+                _testFailures = {};
 
             /* QUnit.testDone
                 gets called every time a QUnit.test(...) block finishes, result is an object which looks like...
@@ -117,9 +117,9 @@
             */
             QUnit.testDone(function (result) {
 
-                if ( result.module !== window._currentModule ){
+                if ( result.module !== _currentModule ){
                     window.callPhantom({ message: "\nModule - " + result.module });
-                    window._currentModule = result.module;
+                    _currentModule = result.module;
                 }
 
                 if ( result.failed == 0 ){
@@ -132,7 +132,7 @@
                         message: " - \033[31m" + result.name + ":\033[39m " + result.passed + "/" + result.total
                     });
 
-                    window._testFailures[result.module+":"+result.name].forEach( function ( result ) {
+                    _testFailures[result.module+":"+result.name].forEach( function ( result ) {
                         var message = ( result.message || "Unnamed" );
                         if ( typeof(result.expected) !== "undefined" ){
                             if ( typeof(result.actual) !== "undefined" ){
@@ -155,10 +155,10 @@
             QUnit.log(function (result) {
                 if ( ! result.result ) {
                     var _name = result.module+":"+result.name;
-                    if ( typeof ( window._testFailures[_name] ) === "undefined" ){
-                        window._testFailures[_name] = [];
+                    if ( typeof ( _testFailures[_name] ) === "undefined" ){
+                        _testFailures[_name] = [];
                     }
-                    window._testFailures[_name].push(result);
+                    _testFailures[_name].push(result);
                 }
                 window.callPhantom({});
             });
@@ -216,13 +216,13 @@
 
     var addJSON = function () {
         window.document.addEventListener('DOMContentLoaded', function () {
-            window._resultReport = {};
+            var _resultReport = {};
             QUnit.testDone(function (result) {
-                window._resultReport[result.module] = window._resultReport[result.module] || [];
-                window._resultReport[result.module].push(result);
+                _resultReport[result.module] = _resultReport[result.module] || [];
+                _resultReport[result.module].push(result);
             });
             QUnit.done(function (result) {
-                window.callPhantom({ finish: window._resultReport, hasFailures: (result.failed > 0 ? true : false) });
+                window.callPhantom({ finish: _resultReport, hasFailures: (result.failed > 0 ? true : false) });
             });
             QUnit.log(function (result) { window.callPhantom({}); });
         });
