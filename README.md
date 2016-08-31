@@ -7,7 +7,6 @@ parts inspired by https://github.com/jonkemp/qunit-phantomjs-runner
     Node > 6.0
     QUnit > 1.20
 
-
 ### Usage
 
     ./local-node/bin/node ./node_modules/.bin/phantomjs ./vendor/phantomjs-qunit-runner/runner.js mytest.html
@@ -64,3 +63,7 @@ Outputs in a JSON format using the outputs from QUnit as the basis
         ],
         ...
     }
+
+#### Developing
+
+Run tests using mocha

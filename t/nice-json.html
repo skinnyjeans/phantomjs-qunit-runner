@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <script type="application/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script type="application/javascript">
+
+        QUnit.module( "My Module", function () {
+            QUnit.test( "first test", function ( a ) {
+                a.equal( 1, 1 );
+                a.equal( 1, 2 );
+            });
+        });
+
+        QUnit.module( "My Other Module", function () {
+            QUnit.test( "First test", function ( a ) {
+                a.equal( 1, 1 );
+            });
+            QUnit.test( "Second test", function ( a ) {
+                a.equal( "sausage", "bacon" );
+            });
+        });
+
+    </script>
+</html>

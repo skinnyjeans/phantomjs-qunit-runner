@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
-    </head>
-
-    <div id="qunit"></div>
-    <div id="qunit-fixture"></div>
-
     <script type="application/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
     <script type="application/javascript">
 
         QUnit.test( "No module", function ( assert ) {
-            assert.ok( true );
+            assert.ok( true, "No module, first test" );
+            assert.equal( 5, 6, "No module second test" );
         });
 
     </script>
