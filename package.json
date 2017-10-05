@@ -1,6 +1,19 @@
 {
   "name": "phantomjs-qunit-runner",
   "version": "0.0.1",
+  "description": "Execute QUnit tests on client-side JS using PhantomJS, multiple output formats.",
+  "author": "Patrick Mooney",
+  "main": "runner.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skinnyjeans/phantomjs-qunit-runner.git"
+  },
+  "keywords": [
+    "qunit",
+    "phantomjs",
+    "test",
+    "junit"
+  ],
   "dependencies": {
     "phantomjs": ">1.5.9"
   },
